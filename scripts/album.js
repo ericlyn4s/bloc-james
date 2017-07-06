@@ -30,6 +30,21 @@ var albumMarconi = {
     ]
 };
 
+var albumLorde = {
+    title: 'Melodrama',
+    artist: 'Lorde',
+    label: 'Indie Pop',
+    year: '2017',
+    albumArtUrl: 'assets/images/album_covers/14.png',
+    songs: [
+        { title: 'Green Light', duration: '4:01' },
+        { title: 'Liability', duration: '3:10' },
+        { title: 'Hard Feelings/Loveless', duration: '5:21'},
+        { title: 'Supercut', duration: '4:46' },
+        { title: 'Perfect Places', duration: '3:45'}
+    ]
+};
+
 var createSongRow = function(songNumber, songName, songLength) {
     var template =
        '<tr class="album-view-song-item">'
@@ -42,16 +57,16 @@ var createSongRow = function(songNumber, songName, songLength) {
     return template;
 };
 
-var setCurrentAlbum = function(album) {
-     // #1
-     var albumTitle = document.getElementsByClassName('album-view-title')[0];
-     var albumArtist = document.getElementsByClassName('album-view-artist')[0];
-     var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
-     var albumImage = document.getElementsByClassName('album-cover-art')[0];
-     var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+//Select elements that we want to populate with text dynamically
+var albumTitle = document.getElementsByClassName('album-view-title')[0];
+var albumArtist = document.getElementsByClassName('album-view-artist')[0];
+var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
+var albumImage = document.getElementsByClassName('album-cover-art')[0];
+var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
 
-     // #2
-     albumTitle.firstChild.nodeValue = album.title;
+var setCurrentAlbum = function(album) {
+     // Assign values to each part of the album (text, images)
+     albumTitle.firstChild.nodeValue = album.name;
      albumArtist.firstChild.nodeValue = album.artist;
      albumReleaseInfo.firstChild.nodeValue = album.year + ' ' + album.label;
      albumImage.setAttribute('src', album.albumArtUrl);
@@ -61,10 +76,20 @@ var setCurrentAlbum = function(album) {
 
      // #4
      for (var i = 0; i < album.songs.length; i++) {
-         albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
+         albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].name, album.songs[i].length);
      }
  };
 
  window.onload = function() {
      setCurrentAlbum(albumPicasso);
+
+     var albums = [albumPicasso, albumMarconi, albumLorde];
+     var index = 1;
+     albumImage.addEventListener("click", function(event) {
+       setCurrentAlbum(albums[index]);
+       index++;
+       if (index == albums.length) {
+         index = 0;
+       }
+     });
  };
