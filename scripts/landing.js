@@ -18,7 +18,7 @@ window.onload = function() {
      if (window.innerHeight > 950) {
          animatePoints(pointsArray);
      }
-
+//This seems to animate correctly
   window.addEventListener('scroll', function(event) {
     if (pointsArray[0].getBoundingClientRect().top <= 500) {
         animatePoints(pointsArray);
