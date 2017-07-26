@@ -36,7 +36,7 @@ var createSongRow = function(songNumber, songName, songLength) {
         '<tr class="album-view-song-item">'
      + '   <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
      + '  <td class="song-item-title">' + songName + '</td>'
-     + '  <td class="song-item-duration">' + songLength + '</td>'
+     + '  <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>'
      + '</tr>'
      ;
 
@@ -128,6 +128,29 @@ var setCurrentAlbum = function(album) {
      }
  };
 
+ var setCurrentTimeInPlayerBar = function(currentTime) {
+   $('.current-time').text(currentTime);
+ }
+
+ var setTotalTimeInPlayerBar = function(totalTime) {
+   $('.total-time').text(totalTime);
+ }
+
+ var filterTimeCode = function(timeInSeconds) {
+     var seconds = parseFloat(timeInSeconds);
+     var wholeSeconds = Math.floor(seconds);
+     var wholeMinutes = Math.floor(seconds / 60);
+     var remainingSeconds = (wholeSeconds % 60);
+
+     var time = wholeMinutes + ":" + remainingSeconds;
+
+     if (remainingSeconds < 10) {
+         time = wholeMinutes + ":" + 0 + remainingSeconds;
+     }
+     return time;
+
+ }
+
  var updateSeekBarWhileSongPlays = function() {
      if (currentSoundFile) {
          // #10
@@ -137,6 +160,7 @@ var setCurrentAlbum = function(album) {
              var $seekBar = $('.seek-control .seek-bar');
 
              updateSeekPercentage($seekBar, seekBarFillRatio);
+             setCurrentTimeInPlayerBar(filterTimeCode(this.getTime()));
          });
      }
  };
@@ -206,6 +230,7 @@ var updatePlayerBarSong = function() {
      $('.currently-playing .artist-name').text(currentAlbum.artist);
      $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
      $('.main-controls .play-pause').html(playerBarPauseButton);
+     setTotalTimeInPlayerBar(filterTimeCode(currentSongFromAlbum.duration));
  };
 
   var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
